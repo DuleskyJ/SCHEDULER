@@ -68,10 +68,12 @@ header {
 
 .time-block .saveBtn {
   background-color: #28a745;
+  font-size: 2em;
   color: #fff;
   border-top-right-radius: 8px;
   border-bottom-right-radius: 8px;
   transition: background-color 0.3s;
+  padding: 20px;
 }
 
 .time-block .saveBtn:hover {
