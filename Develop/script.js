@@ -6,19 +6,35 @@ $(function () {
   function createTimeBlocks(startHour, endHour) {
     const container = $('.container-fluid');
     container.find('.time-block').remove(); // Clear existing time blocks
-    for (let hour = startHour; hour <= endHour; hour++) {
-      const hourStr = hour < 12 ? `${hour}AM` : hour === 12 ? '12PM' : `${hour - 12}PM`;
-      const timeBlock = $(`
-        <div id="hour-${hour}" class="row time-block">
-          <div class="col-2 col-md-1 hour text-center py-3">${hourStr}</div>
-          <textarea class="col-8 col-md-10 description" rows="3"></textarea>
-          <button class="btn saveBtn col-2 col-md-1" aria-label="save">
-            <i class="fas fa-save" aria-hidden="true"></i>
-          </button>
-        </div>
-      `);
 
-      container.append(timeBlock);
+    // Helper function to format hour string
+    function formatHour(hour) {
+      return hour < 12 ? `${hour}AM` : hour === 12 ? '12PM' : `${hour - 12}PM`;
+    }
+
+    // Function to add time blocks for a given range
+    function addTimeBlocks(start, end) {
+      for (let hour = start; hour <= end; hour++) {
+        const hourStr = formatHour(hour);
+        const timeBlock = $(`
+          <div id="hour-${hour}" class="row time-block">
+            <div class="col-2 col-md-1 hour text-center py-3">${hourStr}</div>
+            <textarea class="col-8 col-md-10 description" rows="3"></textarea>
+            <button class="btn saveBtn col-2 col-md-1" aria-label="save">
+              <i class="fas fa-save" aria-hidden="true"></i>
+            </button>
+          </div>
+        `);
+        container.append(timeBlock);
+      }
+    }
+
+    // Handle case where end hour is less than start hour (spans over midnight)
+    if (endHour < startHour) {
+      addTimeBlocks(startHour, 23); // From startHour to end of day
+      addTimeBlocks(0, endHour);    // From start of day to endHour
+    } else {
+      addTimeBlocks(startHour, endHour); // Regular case
     }
   }
 
@@ -79,46 +95,8 @@ $(function () {
     const pastColor = $('#pastColor').val();
     const presentColor = $('#presentColor').val();
     const futureColor = $('#futureColor').val();
-
     $('.past').css('background-color', pastColor);
     $('.present').css('background-color', presentColor);
     $('.future').css('background-color', futureColor);
-
-    localStorage.setItem('pastColor', pastColor);
-    localStorage.setItem('presentColor', presentColor);
-    localStorage.setItem('futureColor', futureColor);
   });
-
-  // Load saved colors from local storage
-  function loadSavedColors() {
-    const pastColor = localStorage.getItem('pastColor') || '#d3d3d3';
-    const presentColor = localStorage.getItem('presentColor') || '#ff6961';
-    const futureColor = localStorage.getItem('futureColor') || '#77dd77';
-
-    $('#pastColor').val(pastColor);
-    $('#presentColor').val(presentColor);
-    $('#futureColor').val(futureColor);
-
-    $('.past').css('background-color', pastColor);
-    $('.present').css('background-color', presentColor);
-    $('.future').css('background-color', futureColor);
-  }
-
-  loadSavedColors();
-
-  // Reminder function
-  function reminderNotification() {
-    $('.time-block').each(function () {
-      const blockHour = parseInt($(this).attr('id').split('-')[1]);
-      const text = $(this).find('textarea').val();
-      const currentHour = dayjs().hour();
-
-      if (blockHour === currentHour && text.trim() !== '') {
-        alert(`Reminder: You have an event at ${blockHour < 12 ? `${blockHour} AM` : blockHour === 12 ? '12 PM' : `${blockHour - 12} PM`} - "${text}"`);
-      }
-    });
-  }
-
-  // Set interval for reminders (every 15 minutes)
-  setInterval(reminderNotification, 900000);
 });
