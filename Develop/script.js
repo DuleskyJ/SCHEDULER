@@ -19,7 +19,9 @@ $(function () {
         const timeBlock = $(`
           <div id="hour-${hour}" class="row time-block">
             <div class="col-2 col-md-1 hour text-center py-3">${hourStr}</div>
-            <textarea class="col-8 col-md-10 description" rows="3"></textarea>
+            <div class="description-container col-8 col-md-10">
+              <textarea class="description" rows="3"></textarea>
+            </div>
             <button class="btn saveBtn col-2 col-md-1" aria-label="save">
               <i class="fas fa-save" aria-hidden="true"></i>
             </button>
@@ -58,7 +60,7 @@ $(function () {
   // Event listener for save buttons
   $('.container-fluid').on('click', '.saveBtn', function () {
     const timeBlockId = $(this).closest('.time-block').attr('id');
-    const text = $(this).siblings('textarea').val();
+    const text = $(this).siblings('.description-container').find('.description').val();
     localStorage.setItem(timeBlockId, text);
   });
 
@@ -68,7 +70,7 @@ $(function () {
       const timeBlockId = $(this).attr('id');
       const savedText = localStorage.getItem(timeBlockId);
       if (savedText) {
-        $(this).find('textarea').val(savedText);
+        $(this).find('.description').val(savedText);
       }
     });
   }
