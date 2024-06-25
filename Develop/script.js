@@ -2,10 +2,11 @@ $(function () {
   // Current Date Display
   $('#currentDay').text(dayjs().format('dddd, MMMM D, YYYY'));
 
-  // Function for timeblocks 
-  function createTimeBlocks() {
+  // Function for timeblock creation
+  function createTimeBlocks(startHour, endHour) {
     const container = $('.container-fluid');
-    for (let hour = 9; hour <= 17; hour++) {
+    container.find('.time-block').remove(); // Clear existing time blocks
+    for (let hour = startHour; hour <= endHour; hour++) {
       const hourStr = hour < 12 ? `${hour}AM` : hour === 12 ? '12PM' : `${hour - 12}PM`;
       const timeBlock = $(`
         <div id="hour-${hour}" class="row time-block">
@@ -56,12 +57,20 @@ $(function () {
     });
   }
 
-  // Initializing 
-  createTimeBlocks();
+  // Initialize with default time range of 9-5
+  createTimeBlocks(9, 17); 
   updateTimeBlocks();
   loadSavedEvents();
 
   // Update every minute
   setInterval(updateTimeBlocks, 60000);
-});
 
+  // Event listener for setting custom time range
+  $('#setTimeRange').on('click', function () {
+    const startTime = parseInt($('#startTime').val().split(':')[0]);
+    const endTime = parseInt($('#endTime').val().split(':')[0]);
+    createTimeBlocks(startTime, endTime);
+    updateTimeBlocks();
+    loadSavedEvents();
+  });
+});
