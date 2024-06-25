@@ -93,4 +93,37 @@ $(function () {
     updateTimeBlocks();
     loadSavedEvents();
   });
+
+  // Reminder functionality
+  $('#setReminder').on('click', function () {
+    const reminderText = $('#reminderText').val();
+    const reminderTime = dayjs($('#reminderTime').val());
+
+    if (!reminderText || !reminderTime.isValid()) {
+      alert('Please enter a valid reminder text and time.');
+      return;
+    }
+
+    const reminder = {
+      text: reminderText,
+      time: reminderTime.toISOString(),
+    };
+
+    localStorage.setItem('reminder', JSON.stringify(reminder));
+    alert('Reminder set successfully!');
+  });
+
+  // Check for reminder every minute
+  setInterval(function () {
+    const reminder = JSON.parse(localStorage.getItem('reminder'));
+    if (reminder) {
+      const now = dayjs();
+      const reminderTime = dayjs(reminder.time);
+
+      if (now.isSame(reminderTime, 'minute')) {
+        alert(`Reminder: ${reminder.text}`);
+        localStorage.removeItem('reminder'); // Clear the reminder after it's shown
+      }
+    }
+  }, 60000);
 });
