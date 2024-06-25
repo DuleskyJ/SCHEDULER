@@ -1,59 +1,93 @@
 body {
-  font-family: 'Open Sans', sans-serif;
+  font-family: 'Fira Sans', sans-serif;
   font-size: 16px;
+  background-color: #f4f4f4;
+  color: #333;
 }
 
-textarea {
-  background: transparent;
-  border: none;
-  resize: none;
-  color: #000000;
-  border-left: 1px solid black;
-  padding: 10px;
+header {
+  background-color: #007bff;
+  color: #fff;
+  text-align: center;
+  border-radius: 8px;
 }
 
-.description {
-  white-space: pre-wrap;
+.container-fluid {
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.time-range-form {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 20px;
 }
 
 .time-block {
-  border-radius: 15px;
+  background-color: #fff;
+  margin-bottom: 10px;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s;
 }
 
-.row {
-  border-top: 1px solid white;
+.time-block:hover {
+  transform: scale(1.02);
 }
 
-.hour {
-  background-color: #ffffff;
-  color: #000000;
-  border-top: 1px dashed #000000;
+.time-block .hour {
+  background-color: #007bff;
+  color: #fff;
+  border-top-left-radius: 8px;
+  border-bottom-left-radius: 8px;
+  font-weight: bold;
+}
+
+.time-block .description {
+  border: none;
+  resize: none;
+  padding: 10px;
+  font-size: 16px;
+}
+
+.time-block .saveBtn {
+  background-color: #28a745;
+  color: #fff;
+  border-top-right-radius: 8px;
+  border-bottom-right-radius: 8px;
+  transition: background-color 0.3s;
+}
+
+.time-block .saveBtn:hover {
+  background-color: #218838;
 }
 
 .past {
   background-color: #d3d3d3;
-  color: white;
+  color: #999;
 }
 
 .present {
   background-color: #ff6961;
-  color: white;
+  color: #fff;
 }
 
 .future {
   background-color: #77dd77;
-  color: white;
+  color: #fff;
 }
 
-.saveBtn {
-  border-left: 1px solid black;
-  border-top-right-radius: 15px;
-  border-bottom-right-radius: 15px;
-  background-color: #06aed5;
-  color: white;
+.color-picker-section {
+  text-align: center;
+  margin-bottom: 20px;
 }
 
-.saveBtn i:hover {
-  font-size: 20px;
-  transition: all 0.3s ease-in-out;
+.color-picker-section label {
+  font-weight: bold;
+}
+
+.color-picker-section input[type="color"] {
+  margin: 0 10px;
 }

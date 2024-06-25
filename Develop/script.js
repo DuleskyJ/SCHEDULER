@@ -25,20 +25,16 @@ $(function () {
   // Function to update time block classes based on current time
   function updateTimeBlocks() {
     const currentHour = dayjs().hour();
-    const pastColor = localStorage.getItem('pastColor') || '#d3d3d3';
-    const presentColor = localStorage.getItem('presentColor') || '#ff6961';
-    const futureColor = localStorage.getItem('futureColor') || '#77dd77';
-
     $('.time-block').each(function () {
       const blockHour = parseInt($(this).attr('id').split('-')[1]);
       $(this).removeClass('past present future');
 
       if (blockHour < currentHour) {
-        $(this).addClass('past').css('background-color', pastColor);
+        $(this).addClass('past');
       } else if (blockHour === currentHour) {
-        $(this).addClass('present').css('background-color', presentColor);
+        $(this).addClass('present');
       } else {
-        $(this).addClass('future').css('background-color', futureColor);
+        $(this).addClass('future');
       }
     });
   }
@@ -61,22 +57,6 @@ $(function () {
     });
   }
 
-  // Function to set custom colors
-  function setColors() {
-    const pastColor = $('#pastColor').val();
-    const presentColor = $('#presentColor').val();
-    const futureColor = $('#futureColor').val();
-
-    localStorage.setItem('pastColor', pastColor);
-    localStorage.setItem('presentColor', presentColor);
-    localStorage.setItem('futureColor', futureColor);
-
-    updateTimeBlocks();
-  }
-
-  // Event listener for setting custom colors
-  $('#setColors').on('click', setColors);
-
   // Initialize with default time range of 9-5
   createTimeBlocks(9, 17); 
   updateTimeBlocks();
@@ -94,36 +74,51 @@ $(function () {
     loadSavedEvents();
   });
 
-  // Reminder functionality
-  $('#setReminder').on('click', function () {
-    const reminderText = $('#reminderText').val();
-    const reminderTime = dayjs($('#reminderTime').val());
+  // Event listener for setting custom colors
+  $('#setColors').on('click', function () {
+    const pastColor = $('#pastColor').val();
+    const presentColor = $('#presentColor').val();
+    const futureColor = $('#futureColor').val();
 
-    if (!reminderText || !reminderTime.isValid()) {
-      alert('Please enter a valid reminder text and time.');
-      return;
-    }
+    $('.past').css('background-color', pastColor);
+    $('.present').css('background-color', presentColor);
+    $('.future').css('background-color', futureColor);
 
-    const reminder = {
-      text: reminderText,
-      time: reminderTime.toISOString(),
-    };
-
-    localStorage.setItem('reminder', JSON.stringify(reminder));
-    alert('Reminder set successfully!');
+    localStorage.setItem('pastColor', pastColor);
+    localStorage.setItem('presentColor', presentColor);
+    localStorage.setItem('futureColor', futureColor);
   });
 
-  // Check for reminder every minute
-  setInterval(function () {
-    const reminder = JSON.parse(localStorage.getItem('reminder'));
-    if (reminder) {
-      const now = dayjs();
-      const reminderTime = dayjs(reminder.time);
+  // Load saved colors from local storage
+  function loadSavedColors() {
+    const pastColor = localStorage.getItem('pastColor') || '#d3d3d3';
+    const presentColor = localStorage.getItem('presentColor') || '#ff6961';
+    const futureColor = localStorage.getItem('futureColor') || '#77dd77';
 
-      if (now.isSame(reminderTime, 'minute')) {
-        alert(`Reminder: ${reminder.text}`);
-        localStorage.removeItem('reminder'); // Clear the reminder after it's shown
+    $('#pastColor').val(pastColor);
+    $('#presentColor').val(presentColor);
+    $('#futureColor').val(futureColor);
+
+    $('.past').css('background-color', pastColor);
+    $('.present').css('background-color', presentColor);
+    $('.future').css('background-color', futureColor);
+  }
+
+  loadSavedColors();
+
+  // Reminder function
+  function reminderNotification() {
+    $('.time-block').each(function () {
+      const blockHour = parseInt($(this).attr('id').split('-')[1]);
+      const text = $(this).find('textarea').val();
+      const currentHour = dayjs().hour();
+
+      if (blockHour === currentHour && text.trim() !== '') {
+        alert(`Reminder: You have an event at ${blockHour < 12 ? `${blockHour} AM` : blockHour === 12 ? '12 PM' : `${blockHour - 12} PM`} - "${text}"`);
       }
-    }
-  }, 60000);
+    });
+  }
+
+  // Set interval for reminders (every 15 minutes)
+  setInterval(reminderNotification, 900000);
 });
