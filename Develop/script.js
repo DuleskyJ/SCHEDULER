@@ -25,16 +25,20 @@ $(function () {
   // Function to update time block classes based on current time
   function updateTimeBlocks() {
     const currentHour = dayjs().hour();
+    const pastColor = localStorage.getItem('pastColor') || '#d3d3d3';
+    const presentColor = localStorage.getItem('presentColor') || '#ff6961';
+    const futureColor = localStorage.getItem('futureColor') || '#77dd77';
+
     $('.time-block').each(function () {
       const blockHour = parseInt($(this).attr('id').split('-')[1]);
       $(this).removeClass('past present future');
 
       if (blockHour < currentHour) {
-        $(this).addClass('past');
+        $(this).addClass('past').css('background-color', pastColor);
       } else if (blockHour === currentHour) {
-        $(this).addClass('present');
+        $(this).addClass('present').css('background-color', presentColor);
       } else {
-        $(this).addClass('future');
+        $(this).addClass('future').css('background-color', futureColor);
       }
     });
   }
@@ -56,6 +60,22 @@ $(function () {
       }
     });
   }
+
+  // Function to set custom colors
+  function setColors() {
+    const pastColor = $('#pastColor').val();
+    const presentColor = $('#presentColor').val();
+    const futureColor = $('#futureColor').val();
+
+    localStorage.setItem('pastColor', pastColor);
+    localStorage.setItem('presentColor', presentColor);
+    localStorage.setItem('futureColor', futureColor);
+
+    updateTimeBlocks();
+  }
+
+  // Event listener for setting custom colors
+  $('#setColors').on('click', setColors);
 
   // Initialize with default time range of 9-5
   createTimeBlocks(9, 17); 
