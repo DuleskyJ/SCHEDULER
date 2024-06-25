@@ -1,12 +1,12 @@
 body {
   font-family: 'Fira Sans', sans-serif;
   font-size: 16px;
-  background-color: #f4f4f4;
+  background-color: #e0b574;
   color: #333;
 }
 
 header {
-  background-color: #007bff;
+  background-color: #8d0303;
   color: #fff;
   text-align: center;
   border-radius: 8px;
@@ -38,7 +38,7 @@ header {
 }
 
 .time-block .hour {
-  background-color: #007bff;
+  background-color: #8d0303;
   color: #fff;
   border-top-left-radius: 8px;
   border-bottom-left-radius: 8px;
