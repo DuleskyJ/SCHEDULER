@@ -31,14 +31,20 @@
       <p id="currentDay" class="lead"></p>
     </header>
     <div class="container-fluid px-5">
+      <div class="time-range-form mb-3">
+        <label for="startTime">Start Time:</label>
+        <input type="time" id="startTime" value="09:00">
+        <label for="endTime">End Time:</label>
+        <input type="time" id="endTime" value="17:00">
+        <button id="setTimeRange" class="btn btn-primary">Set Time Range</button>
+      </div>
       <!-- Time blocks will be dynamically generated here -->
     </div>
-
+  
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/dayjs@1.11.3/dayjs.min.js"
     integrity="sha256-iu/zLUB+QgISXBLCW/mcDi/rnf4m4uEDO0wauy76x7U="
     crossorigin="anonymous"></script>
-
     <script src="script.js"></script>
-  </body>
+  </body>  
 </html>
